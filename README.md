@@ -8,7 +8,7 @@ DADA2000データセットをベースとするため，DADA2000からデータ�
 データセットはここを参考に取得・処理する．処理により生成された動画像データ`/videos`を`./dataset/videos`に配置する．<br>
 ここで処理された画像は`.avi`形式で保存されており，扱うことが困難であるため以下のようにして`.mp4`への変換を行う．
 ```
-bash scripts/
+bash scripts/convert_avi2mp4.sh
 ```
 この実行では，1枚あたり10s程処理に時間がかかり，データセット全てに適応すると約3時間程度必要である．
 
@@ -19,7 +19,7 @@ bash scripts/
 この実装では，途中で終了しても再実行時に`./annotation/log.csv`を参照することで途中から再開可能である．
 ```
 cd app
-streamlit run convert_avi2mp4.py
+streamlit run annotation_app.py
 ```
 この実行より表示されるURLにアクセスすることで，webアプリケーションとしてアノテーションツールを起動可能．<br>
 ▼streamlit実行結果
