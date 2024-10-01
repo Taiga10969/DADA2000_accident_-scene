@@ -19,7 +19,7 @@ bash scripts/
 この実装では，途中で終了しても再実行時に`./annotation/log.csv`を参照することで途中から再開可能である．
 ```
 cd app
-streamlit run hogehoge.py
+streamlit run convert_avi2mp4.py
 ```
 この実行より表示されるURLにアクセスすることで，webアプリケーションとしてアノテーションツールを起動可能．<br>
 ▼streamlit実行結果
