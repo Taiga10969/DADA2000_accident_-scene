@@ -36,6 +36,8 @@ streamlit run annotation_app.py
 - **事故タイプの選択基準**<br>
   `car-to-car`：車と車の事故<br>
   `car-to-pedestrian`：車と歩行者との事故<br>
+  `car-to-motorbike`：車とバイクとの事故
   `car-to-bicycle`：車と自転車との事故<br>
+  `property_damage`：対物事故<br>
   `ather`：その他<br>
-  `bad`：その他，動画として成立していない / 除外したほうが良い<br>
+  `bad_sample`：その他，動画として成立していない / 除外したほうが良い<br>
