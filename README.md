@@ -20,7 +20,7 @@ bash scripts/
 cd app
 streamlit run hogehoge.py
 ```
-この実行より表示されるURLにアクセスすることで，webアプリケーションとしてアノテーションツールを起動可能．
+この実行より表示されるURLにアクセスすることで，webアプリケーションとしてアノテーションツールを起動可能．<br>
 ▼streamlit実行結果
 
 ### アノテーション基準
