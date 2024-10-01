@@ -23,7 +23,7 @@ mp4_list = sorted(os.listdir(anno_dir), key=lambda x: int(re.search(r'\d+', x).g
 csv_file_path = os.path.join("../annotation", "log.csv")
 
 
-scene_type = ["car-to-car", "car-to-pedestrian", "car-to-bicycle", "ather", "bad"]
+scene_type = ["car-to-car", "car-to-pedestrian", "car-to-motorbike", "car-to-bicycle", "property_damage", "ather", "bad_sample"]
 
 os.makedirs(save_dir, exist_ok=True)
 
@@ -53,7 +53,7 @@ video_name = os.path.splitext(anno_file)[0]
 video_file = open(video_path, 'rb')
 video_bytes = video_file.read()
 
-st.write("📼**video** : 全体の動画を確認")
+st.write(f"📼**video** : 全体の動画を確認 ({video_name})")
 st.video(video_bytes)
 
 
