@@ -34,9 +34,9 @@ streamlit run annotation_app.py
   そのため事故の瞬間（ex:車と人が接触した瞬間）を選択するのではなく，**その数フレーム前の可能な限りブレ(ぼやけ)が少ないフレームを選択する**こととする．
   これにより，事故の内容（ex:車と車の間からの飛び出し）を1フレームで確認できる．
 - **事故タイプの選択基準**<br>
-  `car-to-car`：車と車の事故<br>
+  `car-to-car`：車と車の事故 (バスなどの車も含む)<br>
   `car-to-pedestrian`：車と歩行者との事故<br>
-  `car-to-motorbike`：車とバイクとの事故
+  `car-to-motorbike`：車とバイクとの事故<br>
   `car-to-bicycle`：車と自転車との事故<br>
   `property_damage`：対物事故<br>
   `ather`：その他<br>
