@@ -26,9 +26,11 @@ cd app
 streamlit run annotation_app.py
 ```
 この実行より表示されるURLにアクセスすることで，webアプリケーションとしてアノテーションツールを起動可能．<br>
-▼streamlit実行結果
+▼streamlit実行結果<br>
+<img src="https://github.com/user-attachments/assets/183e421d-cd0c-4970-81f4-6a8dbdee4478" alt="paper2poster_streamlit_run" width="400" />
 
 ### アノテーション基準
+
 - **フレーム選択基準**<br>
   アノテーションにより選択したフレームでどんな事故であるかの説明を行うことができることを理想とする．
   そのため事故の瞬間（ex:車と人が接触した瞬間）を選択するのではなく，**その数フレーム前の可能な限りブレ(ぼやけ)が少ないフレームを選択する**こととする．
