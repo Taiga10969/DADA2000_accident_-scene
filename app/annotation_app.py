@@ -9,7 +9,7 @@ import datetime
 st.set_page_config(
     page_title="annotating accident scene",
     page_icon="✏️",
-    #layout="wide",
+    layout="wide",
     initial_sidebar_state="expanded",
     menu_items={}
 )
@@ -30,7 +30,7 @@ if annotator != "":
     csv_file_path = os.path.join("../annotation", annotator, "log.csv")
     
     
-    scene_type = ["car-to-car", "car-to-bus", "car-to-track", "car-to-pedestrian", "car-to-motorbike", "car-to-bicycle", "property_accident", "ather", "bad_sample"]
+    scene_type = ["car-to-car", "car-to-bus", "car-to-track", "car-to-pedestrian", "car-to-motorbike", "car-to-bicycle", "property_accident", "ather", "bad_sample", "Unknown"]
     
     os.makedirs(save_dir, exist_ok=True)
     
@@ -92,85 +92,98 @@ if annotator != "":
     
     st.title("annotating accident scene")
     
-    st.write(f"📼**video** : 全体の動画を確認 ({video_name})")
-    st.video(video_bytes)
+    col1, col2 = st.columns((1,0.5))
+
+    with col1:
+        st.write(f"📼**video** : 全体の動画を確認 ({video_name})")
+        st.video(video_bytes)
+        
     
     
-    
-    st.write("✏️**annotation**")
-    st.text("事故の瞬間のフレームを選択")
-    cap = cv2.VideoCapture(video_path)
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    frame_number = st.slider('フレームをスクロースして選択 / 事故の内容のアノテーション を行い[確定]．', 0, total_frames - 1, 0)
-    
-    
-    cap.set(cv2.CAP_PROP_POS_FRAMES, frame_number)
-    ret, frame = cap.read()
+        st.write("✏️**annotation**")
+        st.text("事故の瞬間のフレームを選択")
+        cap = cv2.VideoCapture(video_path)
+        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        frame_number = st.slider('フレームをスクロースして選択 / 事故の内容のアノテーション を行い[確定]．', 0, total_frames - 1, 0)
+        
+        
+        cap.set(cv2.CAP_PROP_POS_FRAMES, frame_number)
+        ret, frame = cap.read()
     
     if ret:
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        with col1:
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        
+            frame_image = Image.fromarray(frame)
+            st.image(frame_image, caption=f"Frame {frame_number}", use_column_width=True)
+
+
+        with col2:
     
-        frame_image = Image.fromarray(frame)
-        st.image(frame_image, caption=f"Frame {frame_number}", use_column_width=True)
-    
-        q1 = st.selectbox("accident scene type", scene_type, index=0)
-        q2 = st.selectbox("車載カメラの車が事故に関与していますか? (Is the accident related?)", ["True", "False"], index=0)
-    
-        if st.button('確定'):
-            save_path = os.path.join(save_dir, f"{video_name}.png")
-            frame_image.save(save_path)
-            st.write(f"フレーム {frame_number} を {save_path} として保存しました。")
-    
-            ## infomation
-            # 解像度 (幅 x 高さ)
-            width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-            height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-            # アスペクト比
-            aspect_ratio = width / height
-            # フレームレート (fps)
-            fps = cap.get(cv2.CAP_PROP_FPS)
-            # フレーム数
-            frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) 
-            # 動画の長さ (秒)
-            duration = frame_count / fps if fps > 0 else 0
-    
-            # CSVファイルに追加
-            new_row = [
-                anno_file, 
-                video_name, 
-                total_frames,
-                frame_number, 
-                q1, 
-                q2,
-                aspect_ratio,
-                width, 
-                height, 
-                fps,
-                frame_count,
-                duration, 
-                annotator, 
-                datetime.datetime.now(JST),
-            ]
-            with open(csv_file_path, 'a', newline='') as f:
-                writer = csv.writer(f)
-                if not os.path.exists(csv_file_path) or os.stat(csv_file_path).st_size == 0:
-                    writer.writerow(["anno_file", 
-                                     "video_name", 
-                                     "total_frames", 
-                                     "accident_frames", 
-                                     "accident_scene_type", 
-                                     "related_to_the_accident",
-                                     "aspect_ratio", 
-                                     "width", 
-                                     "height", 
-                                     "fps",
-                                     "frame_count",
-                                     "duration", 
-                                     "annotator", 
-                                     "annotation_date"])  # ヘッダー追加
-                writer.writerow(new_row)
-    
-            st.rerun()
+            q1 = st.selectbox("accident scene type", scene_type, index=0)
+            q2 = st.selectbox("Is the accident related?", ["True", "False", "Unknown"], index=0)
+            q3 = st.selectbox("scene_time", ["Daytime", "Nighttime", "Morning/Evening", "Unknown"], index=0)
+            q4 = st.selectbox("Weather", ["Clear", "Rain", "Cloudy", "Unknown"], index=0)
+        
+            if st.button('確定'):
+                save_path = os.path.join(save_dir, f"{video_name}.png")
+                frame_image.save(save_path)
+                st.write(f"フレーム {frame_number} を {save_path} として保存しました。")
+        
+                ## infomation
+                # 解像度 (幅 x 高さ)
+                width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+                height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+                # アスペクト比
+                aspect_ratio = width / height
+                # フレームレート (fps)
+                fps = cap.get(cv2.CAP_PROP_FPS)
+                # フレーム数
+                frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) 
+                # 動画の長さ (秒)
+                duration = frame_count / fps if fps > 0 else 0
+        
+                # CSVファイルに追加
+                new_row = [
+                    anno_file, 
+                    video_name, 
+                    total_frames,
+                    frame_number, 
+                    q1, 
+                    q2,
+                    q3,
+                    q4, 
+                    aspect_ratio,
+                    width, 
+                    height, 
+                    fps,
+                    frame_count,
+                    duration, 
+                    annotator, 
+                    datetime.datetime.now(JST),
+                ]
+                with open(csv_file_path, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    if not os.path.exists(csv_file_path) or os.stat(csv_file_path).st_size == 0:
+                        writer.writerow(["anno_file", 
+                                         "video_name", 
+                                         "total_frames", 
+                                         "accident_frames", #q1
+                                         "accident_scene_type", #q2
+                                         "scene_time", #q3
+                                         "Weather", #q4
+                                         "related_to_the_accident",
+                                         "aspect_ratio", 
+                                         "width", 
+                                         "height", 
+                                         "fps",
+                                         "frame_count",
+                                         "duration", 
+                                         "annotator", 
+                                         "annotation_date"])  # ヘッダー追加
+                    writer.writerow(new_row)
+        
+                st.rerun()
     
     else:
         st.write("Unable to load frame.")
