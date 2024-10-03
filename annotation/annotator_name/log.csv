@@ -1,3 +1,0 @@
-anno_file,video_name,total_frames,accident_frames,accident_scene_type,related_to_the_accident,aspect_ratio,width,height,fps,frame_count,duration,annotator,annotation_date
-images_1_001.mp4,images_1_001,441,53,car-to-pedestrian,True,2.4,1584,660,30.0,441,14.7,annotator_name,2024-10-02 09:52:57.490609+09:00
-images_1_002.mp4,images_1_002,345,154,car-to-pedestrian,True,2.4,1584,660,30.0,345,11.5,annotator_name,2024-10-02 09:53:17.714325+09:00
